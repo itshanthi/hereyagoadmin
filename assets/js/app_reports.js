@@ -1,0 +1,1 @@
+var app_reports = {"ajax_url":"\/flatter\/wp-admin\/admin-ajax.php","images_url":"http:\/\/demos.themebound.com\/flatter\/wp-content\/themes\/clipper\/includes\/reports\/images\/"};
