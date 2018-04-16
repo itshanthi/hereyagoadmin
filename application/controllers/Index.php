@@ -170,7 +170,7 @@ class Index extends CI_Controller {
             $data['inbox'] = json_decode($data1); //echo "<pre>";print_r($data['inbox']);exit;
             $data['totalInbox'] = count((array) $data['inbox']); //total count of inbox of shiping details
             //Total number of users count
-            $url1 = URL . 'User_Profiles.json?auth=' . AUTHKEY;
+            $url1 = URL . 'Android/User_Profiles.json?auth=' . AUTHKEY;
             $data2 = $this->curl($url1);
             $data['totalUsers'] = count((array) json_decode($data2)); //ssssecho "<pre>";print_r($data['totalUsers']);exit;
             $this->load->view('includes/header');
@@ -296,6 +296,29 @@ class Index extends CI_Controller {
             $this->load->view('bigPicture/add', $data1);
             $this->load->view('includes/footer');
         }
+    }
+    
+    public function coupounscj() {
+        if ($this->session->userdata('isLoggedIn') == FALSE) {
+            redirect(base_url());
+        } else {
+            $this->load->view('includes/header');
+            $this->load->view('coupons/list');
+            $this->load->view('includes/footer');
+        }
+    }
+
+    public function getClientCoupouns() {
+        $url34 = URL . 'GiftCoupons.json?auth=' . AUTHKEY . '&orderBy="status"&equalTo="A"';
+        // $url34 = URL . 'GiftCoupons.json?orderBy="status"&equalTo="A"';
+        $data34 = $this->curl($url34);
+        $giftCoupons = json_decode($data34);
+        $exists_name = array();
+        foreach ($giftCoupons as $row1) {
+            array_push($exists_name, $row1);
+        }//echo "2<pre>" ;print_r($exists_name);exit;
+        echo json_encode($exists_name);exit;
+        //echo json_encode($this->angularjs_model->getClientsList()); // to get all clients list and convert into json data
     }
 
 }
