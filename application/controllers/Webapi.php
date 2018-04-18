@@ -9,7 +9,7 @@
  * Revision:
  * Last Modified by : Shanthi
  * Last Modified Date : (21/9/2016)
- * Modified Reason : xxxx xxxxxx
+ * Modified Reason : xxxx xxxxxxlocalhost:8888/hereyagoadmin/StoreImage?type=Profile&Imageurl=1524035921-hPfxVXGFSOCiQ5uWK2Ty_banner.png.jpg
  * *************************************************************** */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -277,15 +277,15 @@ class Webapi extends CI_Controller {
                 }
                 $image = @file_get_contents($Imageurl);
                 $split_image = pathinfo($Imageurl);
-                $filename = time() . '-' . $split_image['filename'] . '.' . $split_image['extension']; 
+                $filename = time() . '-' . $split_image['filename'] . '.' . $split_image['extension'];
                 if (file_exists(SITEPATH . 'assets/uploads/' . $type)) {//echo $type."11";exit;
                     $destination = file_put_contents(SITEPATH . 'assets/uploads/' . $type . '/' . $filename, $image);
                 } else {//echo "21";exit;
                     mkdir(SITEPATH . 'assets/uploads/' . $type, 0777, true);
                     $destination = file_put_contents(SITEPATH . 'assets/uploads/' . $type . '/' . $filename, $image);
                 }
-                if ($destination=='0')  {
-                    $error = array("status" => "successmsg", "foldername" => SITEPATH . 'assets/uploads/' . $type,"filename"=>$filename);
+                if ($destination == '0') {
+                    $error = array("status" => "successmsg", "foldername" => SITEPATH . 'assets/uploads/' . $type, "filename" => $filename);
                     print json_encode($error);
                     exit;
                 }
@@ -501,41 +501,37 @@ class Webapi extends CI_Controller {
         $targeturl .= "&promotion-start-date=$promotionSdate";
         $targeturl .= "&promotion-end-date=$promotionEdate";
         // $targeturl .= "&page-number=1"; //echo $targeturl;exit;
-        $cjdata = $this->curlcoupouns($targeturl, $CJ_DevKey); // echo "<pre>"; print_r($cjdata);exit;
-        // $exists = $this->discounts_model->get_discounts(); // echo "<pre>"; print_r($exists);exit;
+        $cjdata = $this->curlcoupouns($targeturl, $CJ_DevKey);  //echo "<pre>"; print_r($cjdata['links']['link']);exit;  
         $datavalues = array();
         foreach ($cjdata['links']['link'] as $row) {
-            $imageanchor = $row['link-code-html']; //echo $imageanchor;exit;
-            preg_match_all('/src=[\'"]?([^\s\>\'"]*)[\'"\>]/', $imageanchor, $matches);
-            $hrefs = ($matches[1] ? $matches[1] : false);
-            if (!empty($row['coupon-code']) != '') {
-                $fields[] = array(
-                    'catName' => $row['category'],
-                    'advtName' => $row['advertiser-name'],
-                    'linkjs' => $row['link-code-javascript'],
-                    'name' => $row['link-name'],
-                    'desc' => $row['description'],
-                    'startDate' => $row['promotion-start-date'],
-                    'endDate' => $row['promotion-end-date'],
-                    'salecomission' => $row['sale-commission'],
-                    'coupcode' => $row['coupon-code'],
-                    'imageUrl' => $hrefs[0],
-                    'clickUrl' => $row['clickUrl'],
-                    'width' => $row['creative-width'],
-                    'height' => $row['creative-height']
-                );
+            $exists = $this->discounts_model->get_discounts($row['link-name']);  //echo "12<pre>"; print_r($exists);exit;
+            if (!$exists) {
+                $imageanchor = $row['link-code-html']; //echo $imageanchor;exit;
+                preg_match_all('/src=[\'"]?([^\s\>\'"]*)[\'"\>]/', $imageanchor, $matches);
+                $hrefs = ($matches[1] ? $matches[1] : false);
+                if (!empty($row['coupon-code']) != '') {
+                    $fields= array(
+                        'catName' => $row['category'],
+                        'advtName' => $row['advertiser-name'],
+                        'linkjs' => $row['link-code-javascript'],
+                        'name' => $row['link-name'],
+                        'desc' => $row['description'],
+                        'startDate' => $row['promotion-start-date'],
+                        'endDate' => $row['promotion-end-date'],
+                        'salecomission' => $row['sale-commission'],
+                        'coupcode' => $row['coupon-code'],
+                        'imageUrl' => $hrefs[0],
+                        'clickUrl' => $row['clickUrl'],
+                        'width' => $row['creative-width'],
+                        'height' => $row['creative-height']
+                    );
+                     $this->discounts_model->insertrow($fields);
+                }
             }
         }
-        $insert_data = $this->discounts_model->insertrow($fields);
-        echo "<pre>";
-        print_r($insert_data);
-        exit;
-        if ($this->discounts_model->insertrow($fields)) {
-            $this->session->set_flashdata('msg', 'Coupouns added successfully!');
-        } else {
-            $this->session->set_flashdata('failmsg', 'Error in adding the Coupouns');
-        }
-
+//        foreach ($fields as $row) {
+//           
+//        }
         $this->load->view('includes/header');
         $this->load->view('coupons/list');
         $this->load->view('includes/footer');
