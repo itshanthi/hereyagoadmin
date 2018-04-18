@@ -60,6 +60,7 @@ $route['runner/(:any)/(:any)'] = 'runner/index/$1/$1';
 $route['nextstep1/(:any)'] = 'runner/next1/$1';
 $route['nextstep1/(:any)/(:any)'] = 'runner/next1/$1/$1';
 $route['nextstep2/(:any)'] = 'runner/next2/$1';
+$route['StoreImage'] = 'webapi/store_image';
 $route['coupouns'] = 'webapi/add_mycoupouns';
 $route['linkcoupouns'] = 'webapi/add_linkcoupouns';
 $route['flexcoupouns'] = 'webapi/add_flexofferscoupouns';

@@ -17,6 +17,8 @@ class Webapi extends CI_Controller {
 
     function __construct() {
         parent::__construct();
+        $this->load->database();
+        $this->load->model('Discounts_Model', 'discounts_model', TRUE); //loaded discounts model      
         ini_set('max_execution_time', 300);
         // $this->load->library('FirebaseLib.php'); //loaded admin model
     }
@@ -79,13 +81,13 @@ class Webapi extends CI_Controller {
 
     //curl method to retrieve all data from firebase
     private function curlcoupouns($url, $key) {
-        ECHO $key;
+        //ECHO $key;
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, FALSE);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: ' . $key)); // send development key
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        $response = curl_exec($ch);        
+        $response = curl_exec($ch);
         $result = json_decode(json_encode((array) simplexml_load_string($response)), 1);
         // Closing
         curl_close($ch);
@@ -258,6 +260,47 @@ class Webapi extends CI_Controller {
         }
     }
 
+    public function store_image() {//echo "<pre>";print_r($this->input->get());exit;
+        if ($this->input->get('type') != '') {
+            $type = $this->input->get('type');
+            if (empty($type)) {
+                $error = array("status" => "msg", "errmsg" => "Type should not be empty");
+                print json_encode($error);
+                exit;
+            }
+            if ($this->input->get('Imageurl') != '') {
+                $Imageurl = $this->input->get('Imageurl');
+                if (empty($Imageurl)) {
+                    $error = array("status" => "msg", "errmsg" => "ImageUrl should not be empty");
+                    print json_encode($error);
+                    exit;
+                }
+                $image = @file_get_contents($Imageurl);
+                $split_image = pathinfo($Imageurl);
+                $filename = time() . '-' . $split_image['filename'] . '.' . $split_image['extension']; 
+                if (file_exists(SITEPATH . 'assets/uploads/' . $type)) {//echo $type."11";exit;
+                    $destination = file_put_contents(SITEPATH . 'assets/uploads/' . $type . '/' . $filename, $image);
+                } else {//echo "21";exit;
+                    mkdir(SITEPATH . 'assets/uploads/' . $type, 0777, true);
+                    $destination = file_put_contents(SITEPATH . 'assets/uploads/' . $type . '/' . $filename, $image);
+                }
+                if ($destination=='0')  {
+                    $error = array("status" => "successmsg", "foldername" => SITEPATH . 'assets/uploads/' . $type,"filename"=>$filename);
+                    print json_encode($error);
+                    exit;
+                }
+            } else {
+                $error = array("status" => "msg", "errmsg" => "Please give Imageurl in your query string");
+                print json_encode($error);
+                exit;
+            }
+        } else {
+            $error = array("status" => "msg", "errmsg" => "Please give Type in your query string");
+            print json_encode($error);
+            exit;
+        }
+    }
+
     public function activeLink() {
         $string = $this->uri->segment(2);
         if (strpos($string, '+%') === false) {
@@ -305,6 +348,7 @@ class Webapi extends CI_Controller {
             }
         }
     }
+
 //     public function add_mycoupouns() {
 //        if ($this->session->userdata('isLoggedIn') == FALSE) {
 //            redirect(base_url() . 'admin');
@@ -425,123 +469,76 @@ class Webapi extends CI_Controller {
 //            $this->load->view('includes/footer');
 //        }
 //    }
-    
-    public function add_mycoupouns() {        
-            $seg = $this->uri->segment(2);
-            /*             * ******cj live extracting coupouns****** */
-            $websiteid = "8202913";
-            // register for your developer's key here: http://webservices.cj.com/ (input dev key below)
-            $CJ_DevKey = "00810517ac9a945959626e9e590d22b91035f05369006ac135164afb0e15e81986b5541535ec7e106429d9947437f9308311f02ecbfcd89a039f7d28926d91d59b/077590e9d4c210ec5f0980342bd33f19d5d4802e08ed23207b9a782b574ee4f2d4430a4a980f7376cc4f539af100bbb531419e789fc176846ce0a17098e11d41";
-            $linktype = "banner";
-            $advs = "joined"; // results from (joined), (CIDs), (Empty String), (notjoined)
-            $maxresults = 100;
-            $promotion = "coupon";
-            $promotionSdate = "";
-            $promotionEdate = "";
-            // begin building the URL and GETting variables passed  product https://product-search.api.cj.com/v2/product-search
-            $targeturl = "https://link-search.api.cj.com/v2/link-search?";
 
-            // if (isset($_POST["keyword"]) && $_POST["keyword"] != '') {
-            if (isset($seg) && $seg != '') {
-                $keywords = $seg;
-            } else {
-                $keywords = '';
+    public function add_mycoupouns() {
+
+        /*         * ******cj live extracting coupouns****** */
+        $websiteid = "8202913";
+        // register for your developer's key here: http://webservices.cj.com/ (input dev key below)
+        $CJ_DevKey = "00810517ac9a945959626e9e590d22b91035f05369006ac135164afb0e15e81986b5541535ec7e106429d9947437f9308311f02ecbfcd89a039f7d28926d91d59b/077590e9d4c210ec5f0980342bd33f19d5d4802e08ed23207b9a782b574ee4f2d4430a4a980f7376cc4f539af100bbb531419e789fc176846ce0a17098e11d41";
+        $linktype = "banner";
+        $advs = "joined"; // results from (joined), (CIDs), (Empty String), (notjoined)
+        $maxresults = 100;
+        $promotion = "coupon";
+        $promotionSdate = "";
+        $promotionEdate = "";
+        // begin building the URL and GETting variables passed  product https://product-search.api.cj.com/v2/product-search
+        $targeturl = "https://link-search.api.cj.com/v2/link-search?";
+
+        // if (isset($_POST["keyword"]) && $_POST["keyword"] != '') {
+        if (isset($seg) && $seg != '') {
+            $keywords = $seg;
+        } else {
+            $keywords = '';
+        }
+        // $targeturl .= "keywords=$keywords";
+        //SS }
+        $targeturl .= "&records-per-page=" . $maxresults;
+        $targeturl .= "&website-id=$websiteid";
+        $targeturl .= "&advertiser-ids=$advs";
+        $targeturl .= "&link-type=$linktype";
+        $targeturl .= "&promotion-type=$promotion";
+        $targeturl .= "&promotion-start-date=$promotionSdate";
+        $targeturl .= "&promotion-end-date=$promotionEdate";
+        // $targeturl .= "&page-number=1"; //echo $targeturl;exit;
+        $cjdata = $this->curlcoupouns($targeturl, $CJ_DevKey); // echo "<pre>"; print_r($cjdata);exit;
+        // $exists = $this->discounts_model->get_discounts(); // echo "<pre>"; print_r($exists);exit;
+        $datavalues = array();
+        foreach ($cjdata['links']['link'] as $row) {
+            $imageanchor = $row['link-code-html']; //echo $imageanchor;exit;
+            preg_match_all('/src=[\'"]?([^\s\>\'"]*)[\'"\>]/', $imageanchor, $matches);
+            $hrefs = ($matches[1] ? $matches[1] : false);
+            if (!empty($row['coupon-code']) != '') {
+                $fields[] = array(
+                    'catName' => $row['category'],
+                    'advtName' => $row['advertiser-name'],
+                    'linkjs' => $row['link-code-javascript'],
+                    'name' => $row['link-name'],
+                    'desc' => $row['description'],
+                    'startDate' => $row['promotion-start-date'],
+                    'endDate' => $row['promotion-end-date'],
+                    'salecomission' => $row['sale-commission'],
+                    'coupcode' => $row['coupon-code'],
+                    'imageUrl' => $hrefs[0],
+                    'clickUrl' => $row['clickUrl'],
+                    'width' => $row['creative-width'],
+                    'height' => $row['creative-height']
+                );
             }
-            // $targeturl .= "keywords=$keywords";
-            //SS }
-            $targeturl .= "&records-per-page=" . $maxresults;
-            $targeturl .= "&website-id=$websiteid";
-            $targeturl .= "&advertiser-ids=$advs";
-            $targeturl .= "&link-type=$linktype";
-            $targeturl .= "&promotion-type=$promotion";
-            $targeturl .= "&promotion-start-date=$promotionSdate";
-            $targeturl .= "&promotion-end-date=$promotionEdate";
-            // $targeturl .= "&page-number=1"; //echo $targeturl;exit;
-            $cjdata = $this->curlcoupouns($targeturl, $CJ_DevKey);  //echo "<pre>"; print_r($cjdata);exit;
-            $dataarray['giftCoupons'] = array();
-            //retrieving the gift coupons
-            $url1 = URL . 'GiftCoupons.json?auth=' . AUTHKEY;
-            $coupons_exists = $this->curl($url1);
-            $exists = json_decode($coupons_exists);  //echo "<pre>";print_r(count((array) $exists));exit;
-            if (isset($cjdata['links']['link']) && $cjdata['links']['link'] != '') {
-                if (isset($exists) && $exists != '') {//echo "1<pre>";print_r($exists);exit;                   
-                    $exists_name = array();
-                    foreach ($exists as $row1) {
-                        array_push($exists_name, $row1->name);
-                    }
-                    if (isset($exists_name) && $exists_name != '') {//echo "1";exit;
-                        foreach ($cjdata['links']['link'] as $row) {
-                            $imageanchor = $row['link-code-html']; //echo $imageanchor;exit;
-                            preg_match_all('/src=[\'"]?([^\s\>\'"]*)[\'"\>]/', $imageanchor, $matches);
-                            $hrefs = ($matches[1] ? $matches[1] : false); //echo "<pre>";print_r($hrefs[0]);exit;
-                            
-//                             $ext = end(explode('.',$hrefs['0']));//echo $ext.br(2);
-//                            $image  =time().'.'.$ext;//echo $image;exit;
-                            
-//                            $img = SITEPATH.'assets/img/coupouns/';
-//                            file_put_contents($img, file_get_contents($hrefs['0']));
+        }
+        $insert_data = $this->discounts_model->insertrow($fields);
+        echo "<pre>";
+        print_r($insert_data);
+        exit;
+        if ($this->discounts_model->insertrow($fields)) {
+            $this->session->set_flashdata('msg', 'Coupouns added successfully!');
+        } else {
+            $this->session->set_flashdata('failmsg', 'Error in adding the Coupouns');
+        }
 
-                            if (!in_array($row['link-name'], $exists_name)) {
-                                $url = URL . 'GiftCoupons.json?auth=' . AUTHKEY;
-                                $fields = array(
-                                    'catName' => $row['category'],
-                                    'width' => $row['creative-width'],
-                                    'height' => $row['creative-height'],
-                                    'advtName' => $row['advertiser-name'],
-                                    'linksjs' => $row['link-code-javascript'],
-                                    'name' => $row['link-name'],
-                                    'desc' => $row['description'],
-                                    'startDate' => $row['promotion-start-date'],
-                                    'endDate' => $row['promotion-end-date'],
-                                    'salecomission' => $row['sale-commission'],
-                                    'coupcode' => $row['coupon-code'],
-                                    'status' => 'A',
-                                    'imageUrl' => $hrefs[0],
-                                    'clickUrl' => $row['clickUrl']
-                                );
-                                $data1 = $this->curl($url);
-                                $fields = json_encode($fields); //echo "<pre>";print_r(count(giftCoupons));
-                                $data = $this->curl_insert($url, $fields); //inserting the data
-                            }
-                        }
-                    }
-                } else {//echo "2";exit;
-                    foreach ($cjdata['links']['link'] as $row) {
-                        $imageanchor = $row['link-code-html']; //echo $imageanchor;exit;
-                        preg_match_all('/src=[\'"]?([^\s\>\'"]*)[\'"\>]/', $imageanchor, $matches);
-                        $hrefs = ($matches[1] ? $matches[1] : false);
-                        $url = URL . 'GiftCoupons.json?auth=' . AUTHKEY;
-                        $fields = array(
-                            'catName' => $row['category'],
-                            'width' => $row['creative-width'],
-                            'height' => $row['creative-height'],
-                            'advtName' => $row['advertiser-name'],
-                            'linksjs' => $row['link-code-javascript'],
-                            'name' => $row['link-name'],
-                            'desc' => $row['description'],
-                            'startDate' => $row['promotion-start-date'],
-                            'endDate' => $row['promotion-end-date'],
-                            'salecomission' => $row['sale-commission'],
-                            'coupcode' => $row['coupon-code'],
-                            'status' => 'A',
-                            'imageUrl' => $hrefs[0],
-                            'clickUrl' => $row['clickUrl']
-                        );
-                        $data1 = $this->curl($url);
-                        $fields = json_encode($fields); //echo "<pre>";print_r(count($fields));
-                        $data = $this->curl_insert($url, $fields); //inserting the data
-                    }
-                }
-            } 
-            $url34 = URL . 'GiftCoupons.json?auth=' . AUTHKEY . '&orderBy="status"&equalTo="A"';
-            // $url34 = URL . 'GiftCoupons.json?orderBy="status"&equalTo="A"';
-            $data34 = $this->curl($url34);
-            $dataarray['giftCoupons'] = json_decode($data34);   //  echo "2<pre>" ;print_r( $dataarray['giftCoupons']);exit;
-            // echo "3<pre>" ;print_r( $dataarray['giftCoupons']);exit;
-            $this->load->view('includes/header');
-            $this->load->view('coupons/list', $dataarray);
-            $this->load->view('includes/footer');
-       
+        $this->load->view('includes/header');
+        $this->load->view('coupons/list');
+        $this->load->view('includes/footer');
     }
 
 //    public function add_mycoupouns() {
@@ -671,38 +668,40 @@ class Webapi extends CI_Controller {
 //            $this->load->view('includes/footer');
 //        }
 //    }
-
 //delete coupons
- public function del_mycoupouns() {
-       //echo "1";exit;
-            $url34 = URL . 'GiftCoupons.json?auth=' . AUTHKEY;
-            // $url34 = URL . 'GiftCoupons.json?orderBy="status"&equalTo="A"';
-            $data34 = $this->curl($url34);
-            $exists = json_decode($data34);     //echo "2<pre>" ;print_r($exists);exit;
-            foreach ($exists as $key => $row1) {//echo "2<pre>" ;print_r($row1);exit;
-                if (isset($row1->endDate) && $row1->endDate != '') {
-                    $today = date("Y-m-d h:i:s");
-                    $enddate = $row1->endDate; //echo $today."1<br/>".$enddate;exit;
-                    if ($row1->status != 'D') {//echo $today."2<br/>".$enddate;exit;
-                        if (strtotime($today) > strtotime($enddate)) {//echo $key;exit;
-                            $urlup = URL . 'GiftCoupons/' . $key . '.json?auth=' . AUTHKEY;
-                            $ch = curl_init($urlup);
-                            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");                          
-                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-                            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-                            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                'Content-Type: application/json'                             
-                                    )
-                            );
-                            $result = curl_exec($ch);echo "<pre>";print_r($result);exit;
-                            curl_close($ch);
-                        }
+    public function del_mycoupouns() {
+        //echo "1";exit;
+        $url34 = URL . 'GiftCoupons.json?auth=' . AUTHKEY;
+        // $url34 = URL . 'GiftCoupons.json?orderBy="status"&equalTo="A"';
+        $data34 = $this->curl($url34);
+        $exists = json_decode($data34);     //echo "2<pre>" ;print_r($exists);exit;
+        foreach ($exists as $key => $row1) {//echo "2<pre>" ;print_r($row1);exit;
+            if (isset($row1->endDate) && $row1->endDate != '') {
+                $today = date("Y-m-d h:i:s");
+                $enddate = $row1->endDate; //echo $today."1<br/>".$enddate;exit;
+                if ($row1->status != 'D') {//echo $today."2<br/>".$enddate;exit;
+                    if (strtotime($today) > strtotime($enddate)) {//echo $key;exit;
+                        $urlup = URL . 'GiftCoupons/' . $key . '.json?auth=' . AUTHKEY;
+                        $ch = curl_init($urlup);
+                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+                        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                            'Content-Type: application/json'
+                                )
+                        );
+                        $result = curl_exec($ch);
+                        echo "<pre>";
+                        print_r($result);
+                        exit;
+                        curl_close($ch);
                     }
                 }
             }
-        
+        }
     }
+
 //    public function del_mycoupouns() {
 //        if ($this->session->userdata('isLoggedIn') == FALSE) {
 //            redirect(base_url() . 'admin');
@@ -727,7 +726,7 @@ class Webapi extends CI_Controller {
 //            }
 //        }
 //    }
-    
+
 
     public function add_linkcoupouns() {
         if ($this->session->userdata('isLoggedIn') == FALSE) {
@@ -786,7 +785,10 @@ class Webapi extends CI_Controller {
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('application-id: 1098247', 'secret-key: 0a70dfbe-96ca-42a1-97d3-59932d4d1b0c', 'Content-Type: application/json', 'application-type: REST')); // -H
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-            $data = curl_exec($ch);echo "<pre>"; print_r($data);exit;
+            $data = curl_exec($ch);
+            echo "<pre>";
+            print_r($data);
+            exit;
             curl_close($ch);
             return $data;
             //$cjdata = $this->curlcoupouns($targeturl, $CJ_DevKey); // echo "<pre>"; print_r($cjdata);exit;
