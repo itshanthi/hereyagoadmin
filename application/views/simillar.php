@@ -84,7 +84,7 @@
                                                     <?php if (isset($row['imageUrl']) && $row['imageUrl'] != '') { ?>
                                                        <a  href="<?php echo $row['clickUrl']; ?>"><img src="<?php echo $row['imageUrl']; ?>" alt=""></a>
                                                     <?php } else { ?>
-                                                       <a  href="<?php echo $row['clickUrl']; ?>"><?php echo word_limiter($row['name'], 3); ?></a>
+                                                       <a  href="<?php echo $row['clickUrl']; ?>"><?php echo "<div style='height:110px !important;vertical-align: middle; display: table-cell;'><h3 style='line-height:24px;'>" . word_limiter($row['name'], 3) . "</h3></div>"; ?></a>
                                                     <?php }
                                                     ?>
                                                     

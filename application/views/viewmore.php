@@ -90,7 +90,14 @@
 
                                                 <div class="store-holder">
                                                     <div class="store-image">
+                                                          <?php if (isset($viewmore['imageUrl']) && $viewmore['imageUrl'] != '') { ?>
                                                         <a href="<?php echo $viewmore['clickUrl']; ?>"><img src="<?php echo $viewmore['imageUrl']; ?>" alt=""></a>
+                                                    <?php } else { ?>
+                                                          <a href="<?php echo $viewmore['clickUrl']; ?>"><?php echo "<div style='height:110px !important;vertical-align: middle; display: table-cell;'><h3 style='line-height:24px;'>" . word_limiter($viewmore['name'], 3) . "</h3></div>"; ?></a>
+                                                      
+                                                    <?php }
+                                                    ?>
+                                                       
                                                     </div>
                                                 </div>
 
