@@ -68,7 +68,7 @@
                                                 <ul class="maincat-list">                                                                                           
                                             
                                                 <?php foreach($stores as $row) { ?>
-                                                     <li class="maincat cat-item-8"><a href="<?php echo base_url() . 'simillarly/' . $row; ?>" title="<?php echo $row; ?> "><?php echo $row; ?></a></li>  
+                                                    <li class="maincat cat-item-8"><a href="<?php echo base_url() . 'simillarly/' . str_replace(" ", "-", $row); ?>" title="<?php echo $row; ?> "><?php echo $row; ?></a></li>  
                                             <?php }?>
                                                 </ul>
                                              <?php }?>

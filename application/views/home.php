@@ -65,107 +65,27 @@
                                 <h2>Popular Stores</h2>
 
                             </div>
-                            <ul class="store-thumb-list clearfix carousel imp1"
-                                                                  
-                                <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/chicago_staek.png');">                                  
-                                    <a href="<?php echo base_url() . 'simillarly/Chicago Steak Company'; ?>"><span class="store-count">3</span> coupons</a>
-                                </li>
+                            <?php
+                            if (count($stores) > 0) {//echo "1<pre>";print_r($stores);exit;
+                                $arrayKeys = array_keys($stores);
+                                $count = count($stores);
+                                ?>
+                                <ul class="store-thumb-list clearfix carousel imp1">
 
+                                    <?php for ($i = 0; $i < $count; $i++) {
+                                        ?>                                  
+                                        <li style="">     <?php echo $stores[($arrayKeys[$i])]; ?>                             
+                                            <a href="<?php echo base_url() . 'simillarly/' . str_replace(' ','-',$stores[($arrayKeys[$i])]); ?>"><?php echo $stores[($arrayKeys[$i])]; ?></a>
+                                        </li>
+                                    <?php } ?>
 
-                                <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/concord_supplies.png')">           
-                                    <a href="<?php echo base_url() . 'simillarly/Concord Supplies'; ?>"><span class="store-count">16</span> coupons</a>
-                                </li>
+                                </ul>
 
-
-                                <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/ebooks.png')">  
-                                    <a href="<?php echo base_url() . 'simillarly/eBooks.com'; ?>"><span class="store-count">9</span> coupons</a>
-                                </li>
-
-
-                                <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/homeclick.png')">  
-                                    <a href="<?php echo base_url() . 'simillarly/Homeclick.com'; ?>"><span class="store-count">14</span> coupons</a>
-                                </li>
-
-
-                                <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/homesquare.png')">  
-                                    <a href="<?php echo base_url() . 'simillarly/HomeSquare'; ?>"><span class="store-count">17</span> coupons</a>
-                                </li>
-
-
-                                <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/skins.png')">  
-                                    <a href="<?php echo base_url() . 'simillarly/SKINS'; ?>"><span class="store-count">29</span> coupons</a>
-                                </li>
-
-
-                                <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/rvt.png')">  
-                                    <a href="<?php echo base_url() . 'simillarly/RVT.com'; ?>"><span class="store-count">1</span> coupons</a>
-                                </li>
-
-
-                                <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/snapmade.png')">  
-                                    <a href="<?php echo base_url() . 'simillarly/SnapMade'; ?>"><span class="store-count">20</span> coupons</a>
-                                </li>
-
-
-
-
-
-                            </ul>
-                            <!--                            <div class="custom-container slower">
-                                                            
-                                                            <div class="carousel ">                                   
-                                                                <a href="#" class="prev"><img style="margin:auto;" src="<?php echo base_url(); ?>assets/img/prev.png" width="20" height="20" /></a>                                       
-                                                                <ul class="store-thumb-list clearfix carousel imp1">                                        
-                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/chicago_staek.png');">                                  
-                                                                        <a href="<?php echo base_url() . 'simillarly/Chicago Steak Company'; ?>"><span class="store-count">3</span> coupons</a>
-                                                                    </li>
-                            
-                            
-                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/concord_supplies.png')">           
-                                                                        <a href="<?php echo base_url() . 'simillarly/Concord Supplies'; ?>"><span class="store-count">16</span> coupons</a>
-                                                                    </li>
-                            
-                            
-                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/ebooks.png')">  
-                                                                        <a href="<?php echo base_url() . 'simillarly/eBooks.com'; ?>"><span class="store-count">9</span> coupons</a>
-                                                                    </li>
-                            
-                            
-                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/homeclick.png')">  
-                                                                        <a href="<?php echo base_url() . 'simillarly/Homeclick.com'; ?>"><span class="store-count">14</span> coupons</a>
-                                                                    </li>
-                            
-                            
-                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/homesquare.png')">  
-                                                                        <a href="<?php echo base_url() . 'simillarly/HomeSquare'; ?>"><span class="store-count">17</span> coupons</a>
-                                                                    </li>
-                            
-                            
-                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/skins.png')">  
-                                                                        <a href="<?php echo base_url() . 'simillarly/SKINS'; ?>"><span class="store-count">29</span> coupons</a>
-                                                                    </li>
-                            
-                            
-                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/rvt.png')">  
-                                                                        <a href="<?php echo base_url() . 'simillarly/RVT.com'; ?>"><span class="store-count">1</span> coupons</a>
-                                                                    </li>
-                            
-                            
-                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/snapmade.png')">  
-                                                                        <a href="<?php echo base_url() . 'simillarly/SnapMade'; ?>"><span class="store-count">20</span> coupons</a>
-                                                                    </li>
-                            
-                            
-                            
-                            
-                            
-                                                                </ul>
-                                                            </div>
-                                                               <a href="#" class="next"><img style="margin:auto;" src="<?php echo base_url(); ?>assets/img/next.png" width="20" height="20" /></a>
-                                                         
-                                                            <div class="clear"></div>
-                                                        </div>-->
-
+                                <?php
+                            } else {
+                                echo "No Popualar stores found";
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -182,8 +102,8 @@
                                 if (isset($errormsg) && $errormsg != '') {
                                     echo ' <div class="carousel imp"><ul><li>'
                                     . ''
-                                            . ' <div class="slick-slider" >
-                                                            <div class="slide">'.$errormsg.'</div></div></li></ul></div>';
+                                    . ' <div class="slick-slider" >
+                                                            <div class="slide">' . $errormsg . '</div></div></li></ul></div>';
                                 } else {
                                     if (count($coupouns) > 0) { //echo "1<pre>";print_r($coupouns);exit;
                                         ?>
@@ -191,7 +111,7 @@
                                         <div class="carousel imp">
 
                                             <ul>
-        <?php foreach ($coupouns as $key => $row) {//echo "<pre>";print_r($coupouns);  ?>
+        <?php foreach ($coupouns as $key => $row) {//echo "<pre>";print_r($coupouns);    ?>
                                                     <li>
                                                         <div class="slick-slider" >
                                                             <div class="slide">
@@ -199,7 +119,7 @@
                                                                     <?php if (isset($row['imageUrl']) && $row['imageUrl'] != '') { ?>
                                                                         <a href="<?php echo base_url() . 'viewDiscount/' . $row['id'] . "?p=" . $this->input->get('p') . "&qcode=" . $this->input->get('qcode'); ?>" ><img  src="<?php echo $row['imageUrl']; ?>" alt="" /></a>
                                                                     <?php } else { ?>
-                                                                        <a href="<?php echo base_url() . 'viewDiscount/' . $row['id'] . "?p=" . $this->input->get('p') . "&qcode=" . $this->input->get('qcode'); ?>" ><?php echo "<div style='height:110px !important;vertical-align: middle; display: table-cell;'><h3 style='line-height:24px;'>" . word_limiter($row['desc'], 4) . "</h3></div>"; ?></a>
+                                                                        <a href="<?php echo base_url() . 'viewDiscount/' . $row['id'] . "?p=" . $this->input->get('p') . "&qcode=" . $this->input->get('qcode'); ?>" ><?php echo "<div style='height:110px !important;vertical-align: middle; display: table-cell;'><h3 style='line-height:24px;'>" . word_limiter($row['name'], 4) . "</h3></div>"; ?></a>
                                                                     <?php }
                                                                     ?>
 
@@ -208,7 +128,7 @@
                                                                 <h3><a href="<?php echo base_url() . 'viewDiscount/' . $row['id'] . "?p=" . $this->input->get('p') . "&qcode=" . $this->input->get('qcode'); ?>" class="tooltip-links" title="<?php echo $row['desc']; ?>"><?php echo word_limiter($row['name'], 3); ?></a></h3>
 
 
-                                                                <p class="store-name"> <a href="<?php echo base_url() . 'simillarly/' . $row['advtName'] . "?p=" . $this->input->get('p') . "&qcode=" . $this->input->get('qcode'); ?>" rel="tag"><?php echo $row['advtName']; ?></a></p>
+                                                                <p class="store-name"> <a href="<?php echo base_url() . 'simillarly/' . str_replace(' ','-',$row['advtName']) . "?p=" . $this->input->get('p') . "&qcode=" . $this->input->get('qcode'); ?>" rel="tag"><?php echo $row['advtName']; ?></a></p>
                                                                 <a  class="btn blue" href="<?php echo base_url() . 'viewDiscount/' . $row['id'] . "?p=" . $this->input->get('p') . "&qcode=" . $this->input->get('qcode'); ?>">Learn More</a>
                                                                 <div style="height:5px;">&nbsp;</div>
 
@@ -218,7 +138,7 @@
                                                         </div>
 
                                                     </li>                                      
-                                                <?php } ?>
+        <?php } ?>
                                             </ul>
 
                                             <div class="clear"></div>
@@ -237,7 +157,7 @@
                 </div>
 
 
-                <?php $this->load->view('includes/footer_home'); ?>
+<?php $this->load->view('includes/footer_home'); ?>
 
 
                 </body>

@@ -82,19 +82,15 @@ class Discounts extends CI_Controller {
                     $dateFromDatabase = strtotime($res_date_given);
                     $dateTwelveHoursAgo = strtotime("-48 hours");
                     if ($dateFromDatabase >= $dateTwelveHoursAgo) {
-                        $data['coupouns'] = $this->discounts_model->alldiscounts();//echo "1<pre>";print_r($data['coupouns']);exit;
-//                        $url34 = URL . 'GiftCoupons.json?orderBy="status"&equalTo="A"';
-//                        $data34 = $this->curl($url34);
-//                        $coup = json_decode($data34); //echo "12<pre>";print_r($coup->error);exit;
-//                        if (isset($coup->error) && $coup->error != '') {
-//                            $data['errormsg'] = $coup->error;
-//                        } else {
-//                            $data['coupouns'] = $coup;
-//                            $advtcoups = array();
-//                            $catcoups = array();
-//                            $data['stores'] = array_unique($advtcoups);
-//                            $data['categories'] = array_unique($catcoups);
-//                        }
+                        $data['coupouns'] = $this->discounts_model->alldiscounts(); //echo "1<pre>";print_r($data['coupouns']);exit;
+                        $advtcoups = array();
+                        $catcoups = array();
+                        foreach ($data['coupouns'] as $row) {
+                            array_push($advtcoups, $row['advtName']);
+                            array_push($catcoups, $row['catName']);
+                        }
+                        $data['stores'] = array_unique($advtcoups); //stores
+                        $data['categories'] = array_unique($catcoups); //categories                      
                         $this->load->view('home', $data);
                     } else {
                         $this->session->set_flashdata('msg', ' Oops, Your time has been crossed out');
@@ -174,37 +170,20 @@ class Discounts extends CI_Controller {
 
     public function search() {
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
-            $url34 = URL . 'GiftCoupons.json?orderBy="status"&equalTo="A"';
-            $data34 = $this->curl($url34);
-            $coup = json_decode($data34);
-            $exists_name = array();
-            foreach ($coup as $key => $row1) {
-                if (preg_match('/(' . $this->input->post('keyword') . ')/i', $row1->name) === 1) {
-                    array_push($exists_name, $row1);
-                }
-//                if (preg_match('(' . $this->input->post('advtName') . ')', $row1->desc) === 1) {
-//                    array_push($exists_name, $row1);
-//                }
-            }
-            $data['coupouns'] = array_filter($exists_name); //echo "<pre>";print_r($data['coupouns']);exit;    
-            //$data['coupouns'] = array_map("unserialize", array_unique(array_map("serialize", $exists_name)));; //echo "<pre>";print_r($data['coupouns']);exit;   
+            $data['coupouns'] = $this->discounts_model->get_discounts_serach(str_replace('-', ' ', $this->input->post('keyword')));
         }
         $this->load->view('search_results', $data);
     }
 
     public function simillarsearch() {
-        $keyword = $this->uri->segment(2);
-        $url34 = URL . 'GiftCoupons.json?orderBy="advtName"&equalTo="' . $keyword . '"';
-        $data34 = $this->curl($url34);
-        $data['coupouns'] = json_decode($data34);
-        $url34 = URL . 'GiftCoupons.json?orderBy="status"&equalTo="A"';
-        $data34 = $this->curl($url34);
-        $coup = json_decode($data34);
+        $keyword = str_replace('-', ' ', $this->uri->segment(2)); //echo $keyword;exit;
+        $data['coupouns'] = $this->discounts_model->get_advt($keyword); //echo "<pre>";print_r($data['coupouns']);exit;
+        $coup = $this->discounts_model->alldiscounts();
         $advtcoups = array();
         $catcoups = array();
         foreach ($coup as $row) {
-            array_push($advtcoups, $row->advtName);
-            array_push($catcoups, $row->catName);
+            array_push($advtcoups, $row['advtName']);
+            array_push($catcoups, $row['catName']);
         }
         $data['stores'] = array_unique($advtcoups);
         $data['categories'] = array_unique($catcoups);
@@ -212,18 +191,14 @@ class Discounts extends CI_Controller {
     }
 
     public function viewMore() {//echo "<pre>";print_r($this->input->get());exit;
-        $id = $this->uri->segment(2);
-        $url = URL . 'GiftCoupons/' . $id . '.json?auth=' . AUTHKEY; //echo $url;exit;
-        $data = $this->curl($url);
-        $data1['viewmore'] = json_decode($data); // echo "<pre>" ;print_r($data1['viewmore'] );exit;
-        $url34 = URL . 'GiftCoupons.json?orderBy="status"&equalTo="A"';
-        $data34 = $this->curl($url34);
-        $coup = json_decode($data34);
+        $id = $this->uri->segment(2); //echo $id;exit;
+        $data1['viewmore'] = $this->discounts_model->view_details($id);
+        $coup = $this->discounts_model->alldiscounts();
         $advtcoups = array();
         $catcoups = array();
         foreach ($coup as $row) {
-            array_push($advtcoups, $row->advtName);
-            array_push($catcoups, $row->catName);
+            array_push($advtcoups, $row['advtName']);
+            array_push($catcoups, $row['catName']);
         }
         $data1['stores'] = array_unique($advtcoups);
         $data1['categories'] = array_unique($catcoups);

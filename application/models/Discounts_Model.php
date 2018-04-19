@@ -51,6 +51,37 @@ class discounts_model extends CI_Model {
     public function deleterecord($id){
         return $this->db->delete('discounts',array('id'=>$id)); 
     }
+    
+    /*
+     * get records based on advertisement name
+     */
+     public function get_advt($data_to_find) {
+        $this->db->select('*');
+        $this->db->like("advtName",$data_to_find);
+        $query=$this->db->get("discounts");//echo $this->db->last_query();exit;
+        return $query->result_array();	
+    }
+    
+    /*
+     * get details based on id
+     */
+     public function view_details($data_to_find) {
+        $this->db->select('*');
+        $this->db->where("id",$data_to_find);
+        $query=$this->db->get("discounts");//echo $this->db->last_query();exit;
+        return $query->row_array();	
+    }
+    
+       /*
+     * get all the coupouns from discounts table based on name
+     */
+
+    public function get_discounts_serach($data_to_find) {
+        $this->db->select('*');
+        $this->db->LIKE("name",$data_to_find);
+        $query=$this->db->get("discounts");
+        return $query->result_array();	
+    }
 
 }
 

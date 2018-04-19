@@ -61,7 +61,7 @@
                         
                         <div class="content-box">
                             <div class="box-c">
-                                    <?php if (count((array) $viewmore) > 0) {  //echo "<pre>";print_r($viewmore);exit;
+                                    <?php if (count($viewmore) > 0) {  //echo "<pre>";print_r($viewmore);exit;
                                     ?>
 
 
@@ -70,16 +70,16 @@
                                         <div class="blog">
 
 
-                                            <h1 class="entry-title" style="color:#146d85;"><?php echo $viewmore->name; ?></h1>
+                                            <h1 class="entry-title" style="color:#146d85;"><?php echo $viewmore['name']; ?></h1>
 
 
                                             <div class="content-bar iconfix">
                                                 <p class="meta">
                                                     <span>
                                                         <i class="fa fa-calendar"></i>
-                                                        <time class="entry-date published" datetime="2015-09-18T19:19:15+00:00"><?php echo date("M d, Y",strtotime($viewmore->startDate)); ?></time>
-                                                        <time class="entry-date updated" datetime="2015-09-18T19:19:39+00:00"><?php echo date("M d, Y",strtotime($viewmore->startDate)); ?></time>
-                                                        - Expires: <time class="entry-date expired" datetime="2050-09-30T00:00:00+00:00"><?php echo date("M d, Y",strtotime($viewmore->endDate)); ?></time>									</span>
+                                                        <time class="entry-date published" datetime="2015-09-18T19:19:15+00:00"><?php echo date("M d, Y",strtotime($viewmore['startDate'])); ?></time>
+                                                        <time class="entry-date updated" datetime="2015-09-18T19:19:39+00:00"><?php echo date("M d, Y",strtotime($viewmore['startDate'])); ?></time>
+                                                        - Expires: <time class="entry-date expired" datetime="2050-09-30T00:00:00+00:00"><?php echo date("M d, Y",strtotime($viewmore['endDate'])); ?></time>									</span>
                                                     
                                                 </p>
                                                 <!--<p class="comment-count"><i class="fa fa-comments"></i><a href="http://demos.themebound.com/flatter/coupons/best-offer-on-computer-accessories/#respond">0 Comments</a></p>-->
@@ -90,7 +90,7 @@
 
                                                 <div class="store-holder">
                                                     <div class="store-image">
-                                                        <a href="<?php echo $viewmore->clickUrl; ?>"><img src="<?php echo $viewmore->imageUrl; ?>" alt=""></a>
+                                                        <a href="<?php echo $viewmore['clickUrl']; ?>"><img src="<?php echo $viewmore['imageUrl']; ?>" alt=""></a>
                                                     </div>
                                                 </div>
 
@@ -102,7 +102,7 @@
 
                                                         <div class="link-holder">
 
-                                                            <a href="<?php echo $viewmore->clickUrl; ?>" target="_blank" id="coupon-link-250" class="coupon-code-link btn coupon-hidden" title="Click to open site" target="_blank" data-coupon-nonce="b1e670b765" data-coupon-id="250" data-clipboard-text="COMP15"><span><i class="fa fa-lock"></i>View Link</span></a>
+                                                            <a href="<?php echo $viewmore['clickUrl']; ?>" target="_blank" id="coupon-link-250" class="coupon-code-link btn coupon-hidden" title="Click to open site" target="_blank" data-coupon-nonce="b1e670b765" data-coupon-id="250" data-clipboard-text="COMP15"><span><i class="fa fa-lock"></i>View Link</span></a>
 
                                                         </div> <!-- #link-holder -->
 
@@ -113,7 +113,7 @@
                                                     <div class="clear"></div>
 
                                                     <div class="store-info">
-                                                        <i class="icon-building"></i> <a href="<?php echo base_url() . 'simillarly/' . $viewmore->advtName; ?>" rel="tag"><?php echo $viewmore->advtName; ?></a>									</div>
+                                                        <i class="icon-building"></i> <a href="<?php echo base_url() . 'simillarly/' . $viewmore['advtName']; ?>" rel="tag"><?php echo $viewmore['advtName']; ?></a>									</div>
 
                                                 </div> <!-- #coupon-main -->
 
@@ -155,7 +155,7 @@
                                                 <h2>Coupon Details</h2>
 
 
-                                                <p><?php echo $viewmore->desc; ?></p>
+                                                <p><?php echo $viewmore['desc']; ?></p>
 
 
 

@@ -64,7 +64,7 @@
                                     <div class="store">
                                         <div class="text-box">
                                           
-                                                <h1><?php echo 'Coupons in the "'.str_replace("%20", " ", $this->uri->segment(2)).'"'; ?></h1>
+                                                <h1><?php echo 'Coupons in the "'.str_replace('-',' ',$this->uri->segment(2)).'"'; ?></h1>
                                           
                                              <!-- #info -->
                                         </div> <!-- #text-box -->
@@ -74,24 +74,30 @@
                         </div> <!-- #content-box -->
                         <div class="content-box">
                             <div class="box-c">
-                                   <?php if(count((array) $coupouns) > 0){ 
+                                   <?php if(count($coupouns) > 0){ 
                                       foreach($coupouns as $key=>$row) { ?>
                                 <div class="box-holder">
                                     <div class="item post-281 coupon type-coupon status-publish hentry coupon_category-fashion coupon_tag-men coupon_tag-t-shirt coupon_tag-women stores-shop-clues coupon_type-coupon-code" id="post-281">
                                         <div class="item-holder">
                                             <div class="store-holder">
                                                 <div class="store-image">
-                                                    <a  href="<?php echo $row->clickUrl; ?>"><img src="<?php echo $row->imageUrl; ?>" alt=""></a>
+                                                    <?php if (isset($row['imageUrl']) && $row['imageUrl'] != '') { ?>
+                                                       <a  href="<?php echo $row['clickUrl']; ?>"><img src="<?php echo $row['imageUrl']; ?>" alt=""></a>
+                                                    <?php } else { ?>
+                                                       <a  href="<?php echo $row['clickUrl']; ?>"><?php echo word_limiter($row['name'], 3); ?></a>
+                                                    <?php }
+                                                    ?>
+                                                    
                                                 </div>
                                                 <div class="store-name">
-                                                    <a href="<?php echo base_url() . 'simillarly/' . $row->advtName; ?>"  rel="tag"><?php echo $row->advtName; ?></a>			</div>
+                                                    <a href="<?php echo base_url() . 'simillarly/' . $row['advtName']; ?>"  rel="tag"><?php echo $row['advtName']; ?></a>			</div>
                                             </div>
                                             <div class="item-frame">
                                                 <div class="item-panel">
                                                     <div class="clear"></div>				
-                                                    <h3 class="entry-title"><a href="<?php echo base_url() . 'viewDiscount/' . $key; ?>" title="View the &quot;T-shirt combo offer&quot; coupon page" rel="bookmark"><?php echo word_limiter($row->name, 5); ?></a></h3>		
+                                                    <h3 class="entry-title"><a href="<?php echo base_url() . 'viewDiscount/' . $row['id']; ?>" title="View the &quot;T-shirt combo offer&quot; coupon page" rel="bookmark"><?php echo word_limiter($row['name'], 5); ?></a></h3>		
                                                     <div class="content-holder">
-                                                        <p class="desc entry-content"><?php echo $row->desc; ?> </p>
+                                                        <p class="desc entry-content"><?php echo $row['desc']; ?> </p>
                                                     </div>
                                                 </div> <!-- #item-panel -->
                                                 <div class="clear"></div>
@@ -116,7 +122,7 @@
                                                 </div>
                                                 <p class="time-left iconfix">
                                                     <i class="fa fa-bell-o"></i>
-                                                    <time class="entry-date expired" datetime="2056-09-30T00:00:00+00:00"><?php if(isset($row->endDate) && $row->endDate !=''){echo date("M d, Y",strtotime($row->endDate));} ?></time>
+                                                    <time class="entry-date expired" datetime="2056-09-30T00:00:00+00:00"><?php if(isset($row['endDate']) && $row['endDate'] !=''){echo date("M d, Y",strtotime($row['endDate']));} ?></time>
                                                    
                                                 </p>
                                                 <div class="couponAndTip">

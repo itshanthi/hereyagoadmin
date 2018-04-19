@@ -70,7 +70,7 @@
                     echo '0';
                 } ?> results</h2>
                                 </div> <!-- end head -->
-                                <?php if(count((array) $coupouns) > 0){ 
+                                <?php if(count($coupouns) > 0){ 
                                       foreach($coupouns as $key=>$row) { ?>
                                 <div class="item post-16 coupon type-coupon status-publish hentry coupon_category-electronics coupon_tag-books coupon_tag-electronics coupon_tag-online-store stores-amazon coupon_type-printable-coupon" id="post-16">
 
@@ -78,10 +78,10 @@
 
                                         <div class="store-holder">
                                             <div class="store-image">
-                                                <a href="<?php echo base_url() . 'simillarly/' . $row->advtName; ?>"><img src="<?php echo $row->imageUrl; ?>" alt="" width="auto" height="auto" /></a>
+                                                <a href="<?php echo base_url() . 'simillarly/' . $row['advtName']; ?>"><img src="<?php echo $row['imageUrl']; ?>" alt="" width="auto" height="auto" /></a>
                                             </div>
                                             <div class="store-name">
-                                                <a href="<?php echo base_url() . 'simillarly/' . $row->advtName; ?>" rel="tag"><?php echo $row->advtName; ?></a>			</div>
+                                                <a href="<?php echo base_url() . 'simillarly/' . $row['advtName']; ?>" rel="tag"><?php echo $row['advtName']; ?></a>			</div>
                                         </div>
 
                                         <div class="item-frame">
@@ -91,13 +91,13 @@
                                                 <div class="clear"></div>
 
 
-                                                <h3 class="entry-title"><a href="<?php echo base_url() . 'viewDiscount/' . $key; ?>" title="View the &quot;10% Off Amazon&quot; coupon page" rel="bookmark"><?php echo $row->name; ?></a></h3>
+                                                <h3 class="entry-title"><a href="<?php echo base_url() . 'viewDiscount/' . $row['id']; ?>" title="View the &quot;10% Off Amazon&quot; coupon page" rel="bookmark"><?php echo $row['name']; ?></a></h3>
 
 
                                                 <div class="content-holder">
 
 
-                                                    <p class="desc entry-content"><?php echo $row->desc; ?><br/>
+                                                    <p class="desc entry-content"><?php echo $row['desc']; ?><br/>
 <!--                                                        <a href="#" class="more" title="View the &quot;10% Off Amazon&quot; coupon page">more ››</a>--></p>
 
 
@@ -145,7 +145,7 @@
 
                                             <p class="time-left iconfix">
                                                 <i class="fa fa-bell-o"></i>
-                                                <time class="entry-date expired" datetime="<?php echo date("Y-m-d",strtotime($row->endDate)); ?>"><?php echo date("M d, Y",strtotime($row->endDate)); ?></time>
+                                                <time class="entry-date expired" datetime="<?php echo date("Y-m-d",strtotime($row['endDate'])); ?>"><?php echo date("M d, Y",strtotime($row['endDate'])); ?></time>
                                                 <time class="entry-date published" datetime="2015-09-19T13:40:55+00:00">September 19, 2015</time>
                                                 <time class="entry-date updated" datetime="2015-09-19T14:13:41+00:00">September 19, 2015</time>
                                             </p>
