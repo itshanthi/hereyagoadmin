@@ -19,7 +19,7 @@ class discounts_model extends CI_Model {
     }
 
     /*
-     * get all the coupouns from discounts table
+     * get all the coupouns from discounts table based on name
      */
 
     public function get_discounts($data_to_find) {
@@ -33,7 +33,23 @@ class discounts_model extends CI_Model {
      */
 
     public function insertrow($data_to_store) {  
-        $this->db->insert("discounts",$data_to_store);
+        return $this->db->insert("discounts",$data_to_store);
+    }
+    
+    /***
+     * To get all discounts of 
+     */
+    public function alldiscounts() {
+        $this->db->select('*'); 
+        $query=$this->db->get("discounts");
+        return $query->result_array();	
+    }
+    
+    /*
+     * Delete the record based on end date
+     */
+    public function deleterecord($id){
+        return $this->db->delete('discounts',array('id'=>$id)); 
     }
 
 }
