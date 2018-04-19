@@ -27,11 +27,12 @@
                 background: none !important;
                 padding: 0 !important;
             }
-           .extra-width .featured-slider .slider li {
+            .extra-width .featured-slider .slider li {
                 margin-bottom: 15px !important;
-                }
+            }
         </style>
         <link rel='stylesheet' id='at-main-css'  href='<?php echo base_url(); ?>assets/css/style_coupons.css' type='text/css' media='all' />   
+        <link rel="stylesheet" media="all" type="text/css" href="<?php echo base_url(); ?>assets/css/style-demo.css">
         <script type='text/javascript' src='<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js'></script>
         <script type='text/javascript' src='<?php echo base_url(); ?>assets/js/jquery-migrate.min.js'></script>
         <script type='text/javascript' src='<?php echo base_url(); ?>assets/js/core.min.js'></script>
@@ -41,7 +42,10 @@
 
         <script type='text/javascript' src='<?php echo base_url(); ?>assets/js/jquery.ui.datepicker-lang.js'></script>
         <script type='text/javascript' src='<?php echo base_url(); ?>assets/js/easing.js'></script>
-        <script type='text/javascript' src='<?php echo base_url(); ?>assets/js/jcarousellite.min.js'></script>
+
+        <script src="<?php echo base_url(); ?>assets/jquery/jquery.easing-1.3.js"></script>
+        <script src="<?php echo base_url(); ?>assets/jquery/jquery.mousewheel-3.1.12.js"></script>
+        <script src="<?php echo base_url(); ?>assets/jquery/jquery.jcarousellite.js"></script>
         <script type='text/javascript' src='<?php echo base_url(); ?>assets/jquery/flatter_params.js'></script>
         <script type='text/javascript' src='<?php echo base_url(); ?>assets/js/theme-scripts.js'></script>
         <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/pic/favicon.ico" />
@@ -49,56 +53,8 @@
     </head>
     <body id="top" class="home page-template page-template-front-page page-template-front-page-php page page-id-152 extra-width responsive-menu">
         <div id="wrapper">
-            <div class="w1">
+            <div class="w1">                
                 <?php $this->load->view('includes/menu_home'); ?>
-                <!-- #header -->
-                <div id="featured" style="height:700px;">
-                    <div class="frame">
-                        <div class="featured-slider">
-                            <div class="head">
-                                <h2>Featured Coupons</h2>
-                            </div>
-
-                            <div class="gallery-c">
-                                <div class="gallery-holder">
-                                   
-                                    <?php if (count((array) $coupouns) > 0) { ?>
-                                        <div class="slide">
-                                            <div class="slide-contain">
-                                                <ul class="slider">	
-                                                    <?php foreach ($coupouns as $key => $row) {//echo "<pre>";print_r($coupouns); ?>
-                                                    <li>
-                                                            <div class="wrapper" >
-                                                                <div class="image">
-                                                                    <a href="<?php echo base_url() . 'viewDiscount/' . $key; ?>"><img  src="<?php echo $row->imageUrl; ?>" alt="" width="100%" height="110px" /></a>
-                                                                </div>
-                                                                <h3><a href="<?php echo base_url() . 'viewDiscount/' . $key; ?>" title="<?php echo $row->desc; ?>"><?php echo word_limiter($row->name, 3); ?></a></h3>		
-                                                                <p class="store-name"> <a href="<?php echo base_url() . 'simillarly/' . $row->advtName; ?>" rel="tag"><?php echo $row->advtName; ?></a></p>
-                                                                <a class="btn blue" href="<?php echo base_url() . 'viewDiscount/' . $key; ?>">Learn More</a>
-                                                            </div>
-                                                        </li>
-                                                        
-                                                    <?php } ?>
-                                                        
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <?php
-                                    } else {
-                                        echo "No Coupons found";
-                                    }
-                                    ?>
-                                    
-                                    <div class="link-r" style="padding-top:180px;">
-                                        <a href="#" class="next">&nbsp;</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
                 <div id="store-thumb-container" class="slider_area">
                     <div class="frame">
 
@@ -109,19 +65,19 @@
                                 <h2>Popular Stores</h2>
 
                             </div>
-
-                            <ul class="store-thumb-list clearfix">
-                                <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/chicago_staek.png')">                                  
+                            <ul class="store-thumb-list clearfix carousel imp1"
+                                                                  
+                                <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/chicago_staek.png');">                                  
                                     <a href="<?php echo base_url() . 'simillarly/Chicago Steak Company'; ?>"><span class="store-count">3</span> coupons</a>
                                 </li>
 
 
-                                   <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/concord_supplies.png')">           
+                                <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/concord_supplies.png')">           
                                     <a href="<?php echo base_url() . 'simillarly/Concord Supplies'; ?>"><span class="store-count">16</span> coupons</a>
                                 </li>
 
 
-                               <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/ebooks.png')">  
+                                <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/ebooks.png')">  
                                     <a href="<?php echo base_url() . 'simillarly/eBooks.com'; ?>"><span class="store-count">9</span> coupons</a>
                                 </li>
 
@@ -155,21 +111,150 @@
 
 
                             </ul>
+                            <!--                            <div class="custom-container slower">
+                                                            
+                                                            <div class="carousel ">                                   
+                                                                <a href="#" class="prev"><img style="margin:auto;" src="<?php echo base_url(); ?>assets/img/prev.png" width="20" height="20" /></a>                                       
+                                                                <ul class="store-thumb-list clearfix carousel imp1">                                        
+                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/chicago_staek.png');">                                  
+                                                                        <a href="<?php echo base_url() . 'simillarly/Chicago Steak Company'; ?>"><span class="store-count">3</span> coupons</a>
+                                                                    </li>
+                            
+                            
+                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/concord_supplies.png')">           
+                                                                        <a href="<?php echo base_url() . 'simillarly/Concord Supplies'; ?>"><span class="store-count">16</span> coupons</a>
+                                                                    </li>
+                            
+                            
+                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/ebooks.png')">  
+                                                                        <a href="<?php echo base_url() . 'simillarly/eBooks.com'; ?>"><span class="store-count">9</span> coupons</a>
+                                                                    </li>
+                            
+                            
+                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/homeclick.png')">  
+                                                                        <a href="<?php echo base_url() . 'simillarly/Homeclick.com'; ?>"><span class="store-count">14</span> coupons</a>
+                                                                    </li>
+                            
+                            
+                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/homesquare.png')">  
+                                                                        <a href="<?php echo base_url() . 'simillarly/HomeSquare'; ?>"><span class="store-count">17</span> coupons</a>
+                                                                    </li>
+                            
+                            
+                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/skins.png')">  
+                                                                        <a href="<?php echo base_url() . 'simillarly/SKINS'; ?>"><span class="store-count">29</span> coupons</a>
+                                                                    </li>
+                            
+                            
+                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/rvt.png')">  
+                                                                        <a href="<?php echo base_url() . 'simillarly/RVT.com'; ?>"><span class="store-count">1</span> coupons</a>
+                                                                    </li>
+                            
+                            
+                                                                    <li style="background-image:url('<?php echo base_url(); ?>assets/img/popular/snapmade.png')">  
+                                                                        <a href="<?php echo base_url() . 'simillarly/SnapMade'; ?>"><span class="store-count">20</span> coupons</a>
+                                                                    </li>
+                            
+                            
+                            
+                            
+                            
+                                                                </ul>
+                                                            </div>
+                                                               <a href="#" class="next"><img style="margin:auto;" src="<?php echo base_url(); ?>assets/img/next.png" width="20" height="20" /></a>
+                                                         
+                                                            <div class="clear"></div>
+                                                        </div>-->
+
                         </div>
                     </div>
                 </div>
-               <?php $this->load->view('includes/footer_home'); ?>
+                <!-- #header -->
+                <div id="featured" >
+                    <div class="frame">
+                        <div class="featured-slider">
+                            <div class="head">
+                                <h2>Featured Coupons</h2>
+                            </div>
+
+                            <div class="custom-container vertical" >
+                                <?php
+                                if (isset($errormsg) && $errormsg != '') {
+                                    echo ' <div class="carousel imp"><ul><li>'
+                                    . ''
+                                            . ' <div class="slick-slider" >
+                                                            <div class="slide">'.$errormsg.'</div></div></li></ul></div>';
+                                } else {
+                                    if (count($coupouns) > 0) { //echo "1<pre>";print_r($coupouns);exit;
+                                        ?>
+                                        <a href="#" class="prev" ><img style="display: block;margin:0 auto;" src="<?php echo base_url(); ?>assets/img/up.png" width="20" height="20" /></a>
+                                        <div class="carousel imp">
+
+                                            <ul>
+        <?php foreach ($coupouns as $key => $row) {//echo "<pre>";print_r($coupouns);  ?>
+                                                    <li>
+                                                        <div class="slick-slider" >
+                                                            <div class="slide">
+                                                                <div class="image">
+                                                                    <?php if (isset($row['imageUrl']) && $row['imageUrl'] != '') { ?>
+                                                                        <a href="<?php echo base_url() . 'viewDiscount/' . $row['id'] . "?p=" . $this->input->get('p') . "&qcode=" . $this->input->get('qcode'); ?>" ><img  src="<?php echo $row['imageUrl']; ?>" alt="" /></a>
+                                                                    <?php } else { ?>
+                                                                        <a href="<?php echo base_url() . 'viewDiscount/' . $row['id'] . "?p=" . $this->input->get('p') . "&qcode=" . $this->input->get('qcode'); ?>" ><?php echo "<div style='height:110px !important;vertical-align: middle; display: table-cell;'><h3 style='line-height:24px;'>" . word_limiter($row['desc'], 4) . "</h3></div>"; ?></a>
+                                                                    <?php }
+                                                                    ?>
+
+                                                                </div>
+
+                                                                <h3><a href="<?php echo base_url() . 'viewDiscount/' . $row['id'] . "?p=" . $this->input->get('p') . "&qcode=" . $this->input->get('qcode'); ?>" class="tooltip-links" title="<?php echo $row['desc']; ?>"><?php echo word_limiter($row['name'], 3); ?></a></h3>
+
+
+                                                                <p class="store-name"> <a href="<?php echo base_url() . 'simillarly/' . $row['advtName'] . "?p=" . $this->input->get('p') . "&qcode=" . $this->input->get('qcode'); ?>" rel="tag"><?php echo $row['advtName']; ?></a></p>
+                                                                <a  class="btn blue" href="<?php echo base_url() . 'viewDiscount/' . $row['id'] . "?p=" . $this->input->get('p') . "&qcode=" . $this->input->get('qcode'); ?>">Learn More</a>
+                                                                <div style="height:5px;">&nbsp;</div>
+
+                                                            </div>
+
+
+                                                        </div>
+
+                                                    </li>                                      
+                                                <?php } ?>
+                                            </ul>
+
+                                            <div class="clear"></div>
+                                        </div>
+                                        <a href="#" class="next" ><img  style=" display: block;margin: 0 auto 10px;" src="<?php echo base_url(); ?>assets/img/down.png" width="20" height="20" /></a>
+                                            <?php
+                                        } else {
+                                            echo "No Coupons found";
+                                        }
+                                    }
+                                    ?>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <?php $this->load->view('includes/footer_home'); ?>
 
 
                 </body>
 
                 </html>
-<script type="text/javascript">
-$(function() {
-    $(".anyClass").jCarouselLite({
-        btnNext: ".next",
-        btnPrev: ".prev",
-        lines : 2
-    });
-});
-</script>
+                <script type="text/javascript">
+                    $(function () {
+                        $(".vertical .carousel").jCarouselLite({
+                            btnNext: ".vertical .next",
+                            btnPrev: ".vertical .prev",
+                            vertical: true
+                        });
+                        $(".slower .carousel").jCarouselLite({
+                            btnNext: ".slower .next",
+                            btnPrev: ".slower .prev",
+                            speed: 800
+                        });
+                    });
+
+                </script>
